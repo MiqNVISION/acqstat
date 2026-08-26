@@ -24,7 +24,12 @@ class MainWindow(QWidget):
     
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
-            print("File detected")
+            file_url = event.mimeData().urls()[0]
+            file_path = file_url.toLocalFile()
+            if file_path.endswith(".csv"):
+                event.acceptProposedAction()
+                print("Accept")
+            
 
 app = QApplication(sys.argv)
 
