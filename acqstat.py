@@ -84,6 +84,13 @@ class MainWindow(QWidget):
                 f"Columns: {len(df.columns)}\n"
                 f"Duration: {duration:.2f} sec\n\n"
             )
+            
+            for col in df.columns:
+                summary += (
+                f"{col}\n"  
+                f" Min: {df[col].min()}\n"
+                f" Max: {df[col].max()}\n\n"
+            )
             self.stats.setPlainText(summary)
 app = QApplication(sys.argv)
 
