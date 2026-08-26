@@ -1,4 +1,5 @@
-import sys # Needed for argv
+import sys                  # Needed for argv
+from pathlib import Path    # Cross platform paths
 import pandas as pd
 from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout
 
@@ -34,7 +35,7 @@ class MainWindow(QWidget):
             file_path = event.mimeData().urls()[0].toLocalFile()
             df = pd.read_csv(file_path, skiprows=4)
             print(df.head(5))
-            filename = file_path.split("/")[-1]
+            filename = Path(file_path).name
             self.label.setText(
             f"{filename}\n"
             f"Rows: {len(df)}\n"
