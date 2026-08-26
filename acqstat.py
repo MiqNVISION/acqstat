@@ -1,7 +1,7 @@
 import sys                  # Needed for argv
 from pathlib import Path    # Cross platform paths
 import pandas as pd
-from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout
+from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QPlainTextEdit
 
 
 # MainWindow class 
@@ -20,7 +20,10 @@ class MainWindow(QWidget):
         layout = QVBoxLayout()
 
         self.label = QLabel("Drop CSV here")
+        self.stats = QPlainTextEdit()
+        self.stats.setReadOnly(True)
         layout.addWidget(self.label)
+        layout.addWidget(self.stats)
 
         self.setLayout(layout)
     
@@ -36,8 +39,8 @@ class MainWindow(QWidget):
             df = pd.read_csv(file_path, skiprows=4)
             print(df.head(5))
             filename = Path(file_path).name
-            self.label.setText(
-            f"{filename}\n"
+            self.label.setText(f"{filename}\n")
+            self.stats.setPlainText(
             f"Rows: {len(df)}\n"
             f"Columns: {len(df.columns)}"
             )
