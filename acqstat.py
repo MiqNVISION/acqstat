@@ -1,4 +1,5 @@
 import sys # Needed for argv
+import pandas as pd
 from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout
 
 
@@ -17,8 +18,8 @@ class MainWindow(QWidget):
 
         layout = QVBoxLayout()
 
-        label = QLabel("Drop CSV here")
-        layout.addWidget(label)
+        self.label = QLabel("Drop CSV here")
+        layout.addWidget(self.label)
 
         self.setLayout(layout)
     
@@ -27,12 +28,13 @@ class MainWindow(QWidget):
             file_path = event.mimeData().urls()[0].toLocalFile()
             if file_path.lower().endswith(".csv"):
                 event.acceptProposedAction()
-                print("Accept")
-                
+
     def dropEvent(self, event):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
-            print(file_path)
+            df = pd.read_csv(file_path, skiprows=4)
+            print(df.head(5))
+            self.label.setText(file_path.split("/")[-1])
 
 app = QApplication(sys.argv)
 
