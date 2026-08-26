@@ -26,7 +26,7 @@ class MainWindow(QWidget):
         if event.mimeData().hasUrls():
             file_url = event.mimeData().urls()[0]
             file_path = file_url.toLocalFile()
-            if file_path.endswith(".csv"):
+            if file_path.lower().endswith(".csv"):
                 event.acceptProposedAction()
                 print("Accept")
             
