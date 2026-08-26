@@ -73,7 +73,7 @@ class MainWindow(QWidget):
             
             # Recording data
             df = pd.read_csv(file_path, skiprows=skiprow_n)
-            duration = len(df)/srate
+            duration = len(df) / srate if srate else 0
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
 
