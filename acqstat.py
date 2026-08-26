@@ -1,6 +1,7 @@
 import sys                  # Needed for argv
 from pathlib import Path    # Cross platform paths
 import pandas as pd
+import numpy as np
 from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QPlainTextEdit
 
 
@@ -36,20 +37,53 @@ class MainWindow(QWidget):
     def dropEvent(self, event):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
+            
             # Metadata
+            metadata_lines = []
             with open(file_path, "r") as f:
-                metadata = [f.readline().strip() for _ in range(4)]
-            print(metadata)
+                for line in f:
+                    if not line.startswith("#"):
+                        break
+                
+                    metadata_lines.append(line)
+#            print(metadata_lines)
+            
+            ver = None
+            colnames = None
+            srate = None
+
+
+            for line in metadata_lines: 
+
+                if "rate" in line.lower():
+                    srate = np.float64(line.split(" ")[-2])
+
+                elif "version" in line.lower():
+                    ver = line.split(":")[-1]
+
+                elif "time" in line.lower():
+                    timestamp = line.split(":")[-1]
+
+                elif "format" in line.lower():
+                    colnames = line.split(":")[-1]
+
+            print("ver", ver)
+            print("srate", srate)
+            print("timestamp", timestamp)
+            print("cols", colnames)
+            
+            skiprow_n = (len(metadata_lines))
             
             # Recording data
-            df = pd.read_csv(file_path, skiprows=4)
+            df = pd.read_csv(file_path, skiprows=skiprow_n)
             print(df.head(5))
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
             self.stats.setPlainText(
             f"Rows: {len(df)}\n"
-            f"Columns: {len(df.columns)}"
-            )
+            f"Columns: {len(df.columns)}\n"
+            f"Duration: {len(df)/srate} sec"
+                        )
 app = QApplication(sys.argv)
 
 # Instantiate
