@@ -57,7 +57,7 @@ class MainWindow(QWidget):
             for line in metadata_lines: 
 
                 if "version" in line.lower():
-                    ver = line.split(":")[-1].strip()
+                    ver = line.split(" ")[-1].strip()
 
                 elif "rate" in line.lower():
                     srate = np.float64(line.split(" ")[-2])
@@ -67,25 +67,24 @@ class MainWindow(QWidget):
 
                 elif "format" in line.lower():
                     colnames = line.split(":")[-1].strip()
-
-            print("ver", ver)
-            print("srate", srate)
-            print("timestamp", timestamp)
-            print("cols", colnames)
             
             skiprow_n = (len(metadata_lines))
+
             
             # Recording data
             df = pd.read_csv(file_path, skiprows=skiprow_n)
             duration = len(df)/srate
-            print(df.head(5))
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
-            self.stats.setPlainText(
-            f"Rows: {len(df)}\n"
-            f"Columns: {len(df.columns)}\n"
-            f"Duration: {duration:.2f} sec"
-                        )
+
+            summary = (
+                f"Version: {ver}\n"
+                f"Sample rate: {srate} Hz\n"
+                f"Rows: {len(df)}\n"
+                f"Columns: {len(df.columns)}\n"
+                f"Duration: {duration:.2f} sec\n\n"
+            )
+            self.stats.setPlainText(summary)
 app = QApplication(sys.argv)
 
 # Instantiate
