@@ -36,6 +36,12 @@ class MainWindow(QWidget):
     def dropEvent(self, event):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
+            # Metadata
+            with open(file_path, "r") as f:
+                metadata = [f.readline().strip() for _ in range(4)]
+            print(metadata)
+            
+            # Recording data
             df = pd.read_csv(file_path, skiprows=4)
             print(df.head(5))
             filename = Path(file_path).name
