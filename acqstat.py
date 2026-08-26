@@ -34,8 +34,12 @@ class MainWindow(QWidget):
             file_path = event.mimeData().urls()[0].toLocalFile()
             df = pd.read_csv(file_path, skiprows=4)
             print(df.head(5))
-            self.label.setText(file_path.split("/")[-1])
-
+            filename = file_path.split("/")[-1]
+            self.label.setText(
+            f"{filename}\n"
+            f"Rows: {len(df)}\n"
+            f"Columns: {len(df.columns)}"
+            )
 app = QApplication(sys.argv)
 
 # Instantiate
