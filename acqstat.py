@@ -23,8 +23,8 @@ class MainWindow(QWidget):
         self.setLayout(layout)
     
     def dragEnterEvent(self, event):
-        print("drag detected")
-
+        if event.mimeData().hasUrls():
+            print("File detected")
 
 app = QApplication(sys.argv)
 
