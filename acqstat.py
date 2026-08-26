@@ -29,7 +29,12 @@ class MainWindow(QWidget):
             if file_path.lower().endswith(".csv"):
                 event.acceptProposedAction()
                 print("Accept")
-            
+                
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            file_url = event.mimeData().urls()[0]
+            file_path = file_url.toLocalFile()
+            print(file_path)
 
 app = QApplication(sys.argv)
 
