@@ -11,6 +11,9 @@ class MainWindow(QWidget):
 
         self.setWindowTitle("acqstat")
         self.resize(1000, 700)
+        
+        # Drag and drop enabled
+        self.setAcceptDrops(True)
 
         layout = QVBoxLayout()
 
@@ -18,6 +21,9 @@ class MainWindow(QWidget):
         layout.addWidget(label)
 
         self.setLayout(layout)
+    
+    def dragEnterEvent(self, event):
+        print("drag detected")
 
 
 app = QApplication(sys.argv)
