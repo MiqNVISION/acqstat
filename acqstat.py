@@ -32,7 +32,7 @@ class MainWindow(QWidget):
         self.label = QLabel("Drop CSV here")
         self.stats = QPlainTextEdit()
         self.stats.setReadOnly(True)
-        #self.stats.setMaximumHeight(120)
+        self.stats.setMinimumHeight(150)
         
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
@@ -62,9 +62,9 @@ class MainWindow(QWidget):
         layout.addWidget(QLabel(f"Mean: {mean_val:.3f}"))
         layout.addWidget(QLabel(f"Std: {std_val:.3f}"))
 
-#        button.clicked.connect(
-#            lambda checked=False, c=col: self.plot_chart(col)
-#        )
+        button.clicked.connect(
+            lambda checked=False, c=col: self.plot_chart(col)
+        )
 
         card.setLayout(layout)
 
@@ -73,7 +73,13 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
-
+    def plot_chart(self, col):
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        ax.plot(self.time, self.df[col])
+        ax.set_title(col)
+        ax.grid()
+        self.canvas.draw()
     
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
