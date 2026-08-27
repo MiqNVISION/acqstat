@@ -1,3 +1,4 @@
 _support/
 __pycache__/
 *.pyc
+.venv
