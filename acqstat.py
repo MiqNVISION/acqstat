@@ -53,7 +53,7 @@ class MainWindow(QWidget):
         self.channels_layout = QHBoxLayout()
         self.channels_widget.setLayout(self.channels_layout)
         
-        self.figure = Figure()
+        self.figure = Figure() # size does not apply when in widget canvas
         self.canvas = FigureCanvas(self.figure)
         self.canvas.setFixedWidth(600)
         self.canvas.setMinimumHeight(200)
