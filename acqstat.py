@@ -132,6 +132,7 @@ class MainWindow(QWidget):
         ax.set_title(col)
         ax.grid()
         ax.set_xlabel("time (s)")
+        self.figure.tight_layout()
         self.canvas.draw()
 
     def plot_chart_1min(self, col):
