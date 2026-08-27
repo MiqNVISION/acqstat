@@ -47,7 +47,7 @@ class MainWindow(QWidget):
         self.setAcceptDrops(True)
 
         self.label = QLabel("Drop CSV here")
-        self.stats = self.stats = QLabel()
+        self.stats = QLabel()
         self.stats.setFixedHeight(120)
         
         self.channels_widget = QWidget()
