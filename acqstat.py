@@ -103,11 +103,7 @@ class MainWindow(QWidget):
             else:
                 colnames = colnames.split(",")
                 df = pd.read_csv(file_path, skiprows=skiprow_n, names=colnames)
-            
-            #Store in class
-            self.df = df
-
-            
+                        
             # Display filename and summary
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
@@ -120,6 +116,11 @@ class MainWindow(QWidget):
                 f"Columns: {len(df.columns)}\n"
                 f"Duration: {duration:.2f} sec\n\n"
             )
+            
+            
+            #Store in class
+            self.df = df
+            self.srate = srate
             
             # Remove cards from previous file
             while self.channels_layout.count():
