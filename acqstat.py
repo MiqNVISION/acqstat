@@ -36,7 +36,8 @@ class MainWindow(QWidget):
             "I":     "orange",     # I signal
             "Q":     "blue",       # Q signal
             "dist":  "grey",       # CW distance
-	        "pzt":   "darkblue"    # ref PZT breathing
+	        "pzt":   "darkblue",    # ref PZT breathing
+            "HR":    "indianred"   # computed hear rate
         }
 
         self.setWindowTitle("acqstat")
