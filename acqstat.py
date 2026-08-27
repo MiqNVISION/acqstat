@@ -48,7 +48,7 @@ class MainWindow(QWidget):
         self.label = QLabel("Drop CSV here")
         self.stats = QPlainTextEdit()
         self.stats.setReadOnly(True)
-        self.stats.setMinimumHeight(150)
+        self.stats.setMinimumHeight(110)
         
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
@@ -210,6 +210,10 @@ class MainWindow(QWidget):
             # Compute time
             self.set_time_vect()
             
+            # Clear plot
+            self.figure.clear() 
+            self.canvas.draw()
+                        
             # Remove cards from previous file
             while self.channels_layout.count():
                 item = self.channels_layout.takeAt(0)
