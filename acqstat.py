@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QPushButton
 )
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QFont
 
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -24,6 +24,8 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.apply_style()
+                
         self.setWindowIcon(QIcon("NV.ico"))
         
         self.colors = {
@@ -62,6 +64,30 @@ class MainWindow(QWidget):
         layout.addWidget(self.canvas)
         self.setLayout(layout)
     
+    def apply_style(self):
+
+        self.setFont(QFont("Segoe UI", 10))
+
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #eef7ef;
+            }
+
+            QGroupBox {
+                background-color: white;
+                border: 1px solid #c0c0c0;
+                border-radius: 6px;
+                font-weight: bold;
+            }
+
+            QPushButton {
+                background-color: #b8e0b8;
+                border: 1px solid #8ab58a;
+                border-radius: 4px;
+                padding: 4px;
+            }
+        """)
+
     def channel_color(self, col):
         for key, color in self.colors.items():
             if key in col:
