@@ -81,6 +81,16 @@ class MainWindow(QWidget):
                 font-weight: bold;
             }
 
+            QGroupBox#hwprocessed {
+                background-color: #d6d4d4;
+                border: 1px solid #c77522;
+            }
+
+            QGroupBox#processed {
+                background-color: #fff4e8;
+                border: 1px solid #c77522;
+            }
+
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 8px;
@@ -94,6 +104,8 @@ class MainWindow(QWidget):
                 padding: 4px;
             }
         """)
+        
+
 
     def channel_color(self, col):
         for key, color in self.colors.items():
@@ -104,6 +116,12 @@ class MainWindow(QWidget):
     def create_channel_card(self, col, min_val, max_val, mean_val, std_val):
 
         card = QGroupBox(col)
+
+        if "distance" in col.lower() or "filter" in col.lower():
+            card.setObjectName("hwprocessed")
+
+        if col in ["ECG", "HR", "Annotation"]:
+            card.setObjectName("processed")
 
         layout = QVBoxLayout()
         
@@ -142,6 +160,7 @@ class MainWindow(QWidget):
         
     def plot_chart(self, max_sample, col):
         self.figure.clear()
+        self.figure.set_facecolor("#eef7ef")
         ax = self.figure.add_subplot(111)
         ax.plot(self.time[:max_sample], self.df[col].iloc[:max_sample], color=self.channel_color(col))
         ax.set_title(col)
