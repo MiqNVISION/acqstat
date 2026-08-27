@@ -123,7 +123,10 @@ class MainWindow(QWidget):
             # Create card per column of interest            
             for col in df.columns:
                 card = self.create_channel_card(col, df[col].min(), df[col].max())
-                self.channels_layout.addWidget(card)
+                
+                # Leave unwanted channels out
+                if ("ANA" not in col) and ("AC" not in col):
+                    self.channels_layout.addWidget(card)
             self.stats.setPlainText(summary)
 app = QApplication(sys.argv)
 
