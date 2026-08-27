@@ -12,6 +12,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QPushButton
 )
+from PyQt6.QtGui import QIcon
 
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -23,6 +24,8 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.setWindowIcon(QIcon("NV.ico"))
+        
         self.colors = {
             "bre":   "darkcyan",   # CW breathing
             "pul":   "salmon",     # CW pulse
@@ -195,10 +198,10 @@ class MainWindow(QWidget):
                     self.channels_layout.addWidget(card)
             self.stats.setPlainText(summary)
 app = QApplication(sys.argv)
+app.setWindowIcon(QIcon("NV.ico"))
 
 # Instantiate
 window = MainWindow()
-
 window.show()
 
 app.exec()
