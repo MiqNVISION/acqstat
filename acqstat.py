@@ -113,7 +113,14 @@ class MainWindow(QWidget):
                 f"Columns: {len(df.columns)}\n"
                 f"Duration: {duration:.2f} sec\n\n"
             )
-                        
+            
+            # Remove cards from previous file
+            while self.channels_layout.count():
+                item = self.channels_layout.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+
+            # Create card per column of interest            
             for col in df.columns:
                 card = self.create_channel_card(col, df[col].min(), df[col].max())
                 self.channels_layout.addWidget(card)
