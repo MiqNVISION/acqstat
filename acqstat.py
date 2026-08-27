@@ -45,7 +45,7 @@ class MainWindow(QWidget):
         layout.addWidget(self.label)
         layout.addWidget(self.stats)
         layout.addWidget(self.channels_widget)
-
+        layout.addWidget(self.canvas)
         self.setLayout(layout)
         
     def create_channel_card(self, col, min_val, max_val, mean_val, std_val):
@@ -62,13 +62,18 @@ class MainWindow(QWidget):
         layout.addWidget(QLabel(f"Mean: {mean_val:.3f}"))
         layout.addWidget(QLabel(f"Std: {std_val:.3f}"))
 
-        #button.clicked.connect(
-        #    lambda checked=False, c=col: self.plot_channel(c)
-        #)
+#        button.clicked.connect(
+#            lambda checked=False, c=col: self.plot_chart(col)
+#        )
 
         card.setLayout(layout)
 
         return card
+    
+    def set_time_vect(self):
+        self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
+    
+
     
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
@@ -129,9 +134,12 @@ class MainWindow(QWidget):
             )
             
             
-            #Store in class
+            # Store in class
             self.df = df
             self.srate = srate
+            
+            # Compute time
+            self.set_time_vect()
             
             # Remove cards from previous file
             while self.channels_layout.count():
