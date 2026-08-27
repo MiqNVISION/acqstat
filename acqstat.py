@@ -46,9 +46,8 @@ class MainWindow(QWidget):
         self.setAcceptDrops(True)
 
         self.label = QLabel("Drop CSV here")
-        self.stats = QPlainTextEdit()
-        self.stats.setReadOnly(True)
-        self.stats.setMinimumHeight(110)
+        self.stats = self.stats = QLabel()
+        self.stats.setMinimumHeight(120)
         
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
@@ -233,7 +232,7 @@ class MainWindow(QWidget):
                 # Leave unwanted channels out
                 if ("ANA" not in col) and ("AC" not in col):
                     self.channels_layout.addWidget(card)
-            self.stats.setPlainText(summary)
+            self.stats.setText(summary)
 app = QApplication(sys.argv)
 app.setWindowIcon(QIcon("NV.ico"))
 
