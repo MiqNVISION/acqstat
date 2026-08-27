@@ -138,11 +138,11 @@ class MainWindow(QWidget):
         layout.addWidget(QLabel(f"Std: {std_val:.3f}"))
 
         button.clicked.connect(
-            lambda checked=False, c=col: self.plot_chart_wrapper(col)
+            lambda checked=False, c=col: self.plot_chart_wrapper(c)
         )
         
         button_1min.clicked.connect(
-            lambda checked=False, c=col: self.plot_chart_wrapper(col, "1min")
+            lambda checked=False, c=col: self.plot_chart_wrapper(c, "1min")
         )
 
         card.setLayout(layout)
