@@ -13,6 +13,9 @@ from PyQt6.QtWidgets import (
     QPushButton
 )
 
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 # MainWindow class 
 class MainWindow(QWidget):
     
@@ -34,6 +37,9 @@ class MainWindow(QWidget):
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
         self.channels_widget.setLayout(self.channels_layout)
+        
+        self.figure = Figure()
+        self.canvas = FigureCanvas(self.figure)
 
         layout = QVBoxLayout()        
         layout.addWidget(self.label)
