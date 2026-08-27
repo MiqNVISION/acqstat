@@ -116,11 +116,11 @@ class MainWindow(QWidget):
         layout.addWidget(QLabel(f"Std: {std_val:.3f}"))
 
         button.clicked.connect(
-            lambda checked=False, c=col: self.plot_chart(col)
+            lambda checked=False, c=col: self.plot_chart_wrapper(col)
         )
         
         button_1min.clicked.connect(
-            lambda checked=False, c=col: self.plot_chart_1min(col)
+            lambda checked=False, c=col: self.plot_chart_wrapper(col, "1min")
         )
 
         card.setLayout(layout)
@@ -130,25 +130,24 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
-    def plot_chart(self, col):
+    def plot_chart_wrapper(self, col, limit=None):
+        if limit == "1min":
+            max_sample = int(self.srate*60)
+        
+        elif limit == None:
+            max_sample = len(self.df)
+        self.plot_chart(max_sample, col)
+        
+    def plot_chart(self, max_sample, col):
         self.figure.clear()
         ax = self.figure.add_subplot(111)
-        ax.plot(self.time, self.df[col], color=self.channel_color(col))
+        ax.plot(self.time[:max_sample], self.df[col].iloc[:max_sample], color=self.channel_color(col))
         ax.set_title(col)
         ax.grid()
         ax.set_xlabel("time (s)")
         self.figure.tight_layout()
         self.canvas.draw()
 
-    def plot_chart_1min(self, col):
-        self.figure.clear()
-        ax = self.figure.add_subplot(111)
-        ax.plot(self.time[:int(self.srate*60)], self.df[col].iloc[:int(self.srate*60)], color=self.channel_color(col))
-        ax.set_title(col)
-        ax.grid()
-        ax.set_xlabel("time (s)")
-        self.canvas.draw()
-    
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
