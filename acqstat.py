@@ -47,7 +47,7 @@ class MainWindow(QWidget):
 
         self.label = QLabel("Drop CSV here")
         self.stats = self.stats = QLabel()
-        self.stats.setMinimumHeight(120)
+        self.stats.setFixedHeight(120)
         
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
@@ -55,6 +55,8 @@ class MainWindow(QWidget):
         
         self.figure = Figure()
         self.canvas = FigureCanvas(self.figure)
+        self.canvas.setFixedWidth(600)
+        self.canvas.setMinimumHeight(200)
 
         layout = QVBoxLayout()        
         layout.addWidget(self.label)
