@@ -2,7 +2,15 @@ import sys                  # Needed for argv
 from pathlib import Path    # Cross platform paths
 import pandas as pd
 import numpy as np
-from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QPlainTextEdit
+from PyQt6.QtWidgets import (
+    QApplication, 
+    QLabel, 
+    QWidget, 
+    QVBoxLayout, 
+    QPlainTextEdit,
+    QGroupBox,
+    QHBoxLayout
+)
 
 
 # MainWindow class 
@@ -19,14 +27,34 @@ class MainWindow(QWidget):
         self.setAcceptDrops(True)
 
         layout = QVBoxLayout()
+        self.channels_layout = QHBoxLayout()
 
         self.label = QLabel("Drop CSV here")
         self.stats = QPlainTextEdit()
         self.stats.setReadOnly(True)
+        
+        self.channels_widget = QWidget()
+        self.channels_layout = QHBoxLayout()
+        self.channels_widget.setLayout(self.channels_layout)
+        
         layout.addWidget(self.label)
         layout.addWidget(self.stats)
+        layout.addWidget(self.channels_widget)
 
         self.setLayout(layout)
+        
+    def create_channel_card(self, col, min_val, max_val):
+
+        card = QGroupBox(col)
+
+        layout = QVBoxLayout()
+
+        layout.addWidget(QLabel(f"Min: {min_val:.3f}"))
+        layout.addWidget(QLabel(f"Max: {max_val:.3f}"))
+
+        card.setLayout(layout)
+
+        return card
     
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
@@ -84,13 +112,10 @@ class MainWindow(QWidget):
                 f"Columns: {len(df.columns)}\n"
                 f"Duration: {duration:.2f} sec\n\n"
             )
-            
+                        
             for col in df.columns:
-                summary += (
-                f"{col}\n"  
-                f" Min: {df[col].min()}\n"
-                f" Max: {df[col].max()}\n\n"
-            )
+                card = self.create_channel_card(col, df[col].min(), df[col].max())
+                self.channels_layout.addWidget(card)
             self.stats.setPlainText(summary)
 app = QApplication(sys.argv)
 
