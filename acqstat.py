@@ -23,6 +23,17 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.colors = {
+            "bre":   "darkcyan",   # CW breathing
+            "pul":   "salmon",     # CW pulse
+            "sound": "maroon",     # CW heart sound
+            "ECG":   "deeppink",   # CW ECG
+            "I":     "orange",     # I signal
+            "Q":     "blue",       # Q signal
+            "dist":  "grey",       # CW distance
+	        "pzt":   "darkblue"    # ref PZT breathing
+        }
+
         self.setWindowTitle("acqstat")
         self.resize(1000, 700)
         
@@ -47,7 +58,13 @@ class MainWindow(QWidget):
         layout.addWidget(self.channels_widget)
         layout.addWidget(self.canvas)
         self.setLayout(layout)
-        
+    
+    def channel_color(self, col):
+        for key, color in self.colors.items():
+            if key in col:
+                return color
+        return "black"
+
     def create_channel_card(self, col, min_val, max_val, mean_val, std_val):
 
         card = QGroupBox(col)
@@ -76,10 +93,12 @@ class MainWindow(QWidget):
     def plot_chart(self, col):
         self.figure.clear()
         ax = self.figure.add_subplot(111)
-        ax.plot(self.time, self.df[col])
+        ax.plot(self.time, self.df[col], color=self.channel_color(col))
         ax.set_title(col)
         ax.grid()
+        ax.set_xlabel("time (s)")
         self.canvas.draw()
+
     
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
