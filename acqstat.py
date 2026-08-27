@@ -82,7 +82,7 @@ class MainWindow(QWidget):
             timestamp = None
             colnames = None
 
-
+            # Get metadata first to store header, srate, versiona and timestamp
             for line in metadata_lines: 
 
                 if "version" in line.lower():
@@ -98,9 +98,8 @@ class MainWindow(QWidget):
                     colnames = line.split(":")[-1].strip()
                 
             skiprow_n = (len(metadata_lines))
-
             
-            # Recording data
+            # Load recording CSV data (deending on header)
             if colnames == None or colnames == "":
                 df = pd.read_csv(file_path, skiprows=skiprow_n)
             else:
