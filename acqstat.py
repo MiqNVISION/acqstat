@@ -84,16 +84,12 @@ class MainWindow(QWidget):
 
             # Get metadata first to store header, srate, versiona and timestamp
             for line in metadata_lines: 
-
                 if "version" in line.lower():
                     ver = line.split(" ")[-1].strip()
-
                 elif "rate" in line.lower():
                     srate = np.float64(line.split(" ")[-2])
-
                 elif "time" in line.lower():
                     timestamp = line.split(":")[-1].strip()
-
                 elif "format" in line.lower():
                     colnames = line.split(":")[-1].strip()
                 
