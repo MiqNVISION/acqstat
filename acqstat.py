@@ -72,12 +72,18 @@ class MainWindow(QWidget):
             QWidget {
                 background-color: #eef7ef;
             }
-
             QGroupBox {
                 background-color: white;
                 border: 1px solid #c0c0c0;
                 border-radius: 6px;
+                margin-top: 10px;
                 font-weight: bold;
+            }
+
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 8px;
+                padding: 0 3px;
             }
 
             QPushButton {
