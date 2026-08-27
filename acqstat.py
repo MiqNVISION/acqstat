@@ -96,12 +96,17 @@ class MainWindow(QWidget):
 
                 elif "format" in line.lower():
                     colnames = line.split(":")[-1].strip()
-            
+                
             skiprow_n = (len(metadata_lines))
 
             
             # Recording data
-            df = pd.read_csv(file_path, skiprows=skiprow_n)
+            if colnames == None or colnames == "":
+                df = pd.read_csv(file_path, skiprows=skiprow_n)
+            else:
+                colnames = colnames.split(",")
+                df = pd.read_csv(file_path, skiprows=skiprow_n, names=colnames)
+
             duration = len(df) / srate if srate else 0
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
