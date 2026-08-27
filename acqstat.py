@@ -44,7 +44,7 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
         
-    def create_channel_card(self, col, min_val, max_val):
+    def create_channel_card(self, col, min_val, max_val, mean_val, std_val):
 
         card = QGroupBox(col)
 
@@ -52,6 +52,8 @@ class MainWindow(QWidget):
 
         layout.addWidget(QLabel(f"Min: {min_val:.3f}"))
         layout.addWidget(QLabel(f"Max: {max_val:.3f}"))
+        layout.addWidget(QLabel(f"Mean: {mean_val:.3f}"))
+        layout.addWidget(QLabel(f"Std: {std_val:.3f}"))
 
         card.setLayout(layout)
 
@@ -122,7 +124,7 @@ class MainWindow(QWidget):
 
             # Create card per column of interest            
             for col in df.columns:
-                card = self.create_channel_card(col, df[col].min(), df[col].max())
+                card = self.create_channel_card(col, np.min(df[col]), np.max(df[col]), np.mean(df[col]), np.std(df[col]))
                 
                 # Leave unwanted channels out
                 if ("ANA" not in col) and ("AC" not in col):
