@@ -32,6 +32,7 @@ class MainWindow(QWidget):
         self.label = QLabel("Drop CSV here")
         self.stats = QPlainTextEdit()
         self.stats.setReadOnly(True)
+        #self.stats.setMaximumHeight(120)
         
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
