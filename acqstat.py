@@ -71,9 +71,11 @@ class MainWindow(QWidget):
 
         layout = QVBoxLayout()
         
-        button = QPushButton(col)
+        button = QPushButton("Plot " + col)
+        button_1min = QPushButton("1min Plot " + col)
 
         layout.addWidget(button)
+        layout.addWidget(button_1min)
         layout.addWidget(QLabel(f"Min: {min_val:.3f}"))
         layout.addWidget(QLabel(f"Max: {max_val:.3f}"))
         layout.addWidget(QLabel(f"Mean: {mean_val:.3f}"))
@@ -81,6 +83,10 @@ class MainWindow(QWidget):
 
         button.clicked.connect(
             lambda checked=False, c=col: self.plot_chart(col)
+        )
+        
+        button_1min.clicked.connect(
+            lambda checked=False, c=col: self.plot_chart_1min(col)
         )
 
         card.setLayout(layout)
@@ -99,6 +105,14 @@ class MainWindow(QWidget):
         ax.set_xlabel("time (s)")
         self.canvas.draw()
 
+    def plot_chart_1min(self, col):
+        self.figure.clear()
+        ax = self.figure.add_subplot(111)
+        ax.plot(self.time[:int(self.srate*60)], self.df[col].iloc[:int(self.srate*60)], color=self.channel_color(col))
+        ax.set_title(col)
+        ax.grid()
+        ax.set_xlabel("time (s)")
+        self.canvas.draw()
     
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
