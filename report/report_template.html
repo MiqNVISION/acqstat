@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+@page {
+    size: A4;
+    margin: 12mm;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11pt;
+    color: #222;
+    margin: 0;
+}
+
+h1, h2, h3 {
+    margin: 0;
+}
+
+.small {
+    font-size: 9pt;
+    color: #666;
+}
+
+/* Header */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #1f4e79;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1f4e79;
+}
+
+.report-title {
+    text-align: right;
+}
+
+/* KPI cards */
+
+.kpis {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.card {
+    flex: 1;
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    text-align: center;
+    padding: 10px;
+}
+
+.card-value {
+    font-size: 18pt;
+    font-weight: bold;
+    color: #1f4e79;
+}
+
+.card-label {
+    font-size: 9pt;
+    color: #666;
+}
+
+/* Summary */
+
+.summary {
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+/* Main plot */
+
+.main-plot {
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.main-plot img {
+    width: 100%;
+}
+
+/* Bottom section */
+
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+.column {
+    flex: 1;
+}
+
+.panel {
+    border: 1px solid #d0d0d0;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+.panel h3 {
+    margin-bottom: 8px;
+    color: #1f4e79;
+}
+
+.panel img {
+    width: 100%;
+}
+
+/* Table */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 5px;
+    border-bottom: 1px solid #ececec;
+}
+
+/* Conclusion */
+
+.conclusion {
+    margin-top: 15px;
+    border-left: 5px solid #28a745;
+    background: #f3faf5;
+    padding: 10px;
+}
+
+/* Footer */
+
+.footer {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 8pt;
+    color: #888;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="logo">
+        INTERA
+    </div>
+
+    <div class="report-title">
+        <h1>Recording Analysis Report</h1>
+        <div class="small">
+            Subject: REC-001<br>
+            Date: 2026-09-11
+        </div>
+    </div>
+
+</div>
+
+<!-- KPI CARDS -->
+
+<div class="kpis">
+
+    <div class="card">
+        <div class="card-value">15 min</div>
+        <div class="card-label">Duration</div>
+    </div>
+
+    <div class="card">
+        <div class="card-value">250 Hz</div>
+        <div class="card-label">Sample Rate</div>
+    </div>
+
+    <div class="card">
+        <div class="card-value">93%</div>
+        <div class="card-label">Quality</div>
+    </div>
+
+    <div class="card">
+        <div class="card-value">18.3 dB</div>
+        <div class="card-label">SNR</div>
+    </div>
+
+</div>
+
+<!-- SUMMARY -->
+
+<div class="summary">
+
+    <h2>Key Findings</h2>
+
+    <ul>
+        <li>Recording quality was sufficient for analysis.</li>
+        <li>No missing samples detected.</li>
+        <li>Low motion artefact content.</li>
+        <li>Overall signal stability was high.</li>
+    </ul>
+
+</div>
+
+<!-- MAIN PLOT -->
+
+<div class="main-plot">
+
+    <h2>Signal Overview</h2>
+
+    overview.png
+
+</div>
+
+<!-- BOTTOM ROW -->
+
+<div class="row">
+
+    <div class="column">
+
+        <div class="panel">
+
+            <h3>Spectrum</h3>
+
+            spectrum.png
+
+        </div>
+
+    </div>
+
+    <div class="column">
+
+        <div class="panel">
+
+            <h3>Quality Metrics</h3>
+
+            <table>
+                <tr>
+                    <td>Mean Value</td>
+                    <td>0.12</td>
+                </tr>
+
+                <tr>
+                    <td>RMS</td>
+                    <td>0.67</td>
+                </tr>
+
+                <tr>
+                    <td>SNR</td>
+                    <td>18.3 dB</td>
+                </tr>
+
+                <tr>
+                    <td>Missing Samples</td>
+                    <td>0</td>
+                </tr>
+
+                <tr>
+                    <td>Clipping</td>
+                    <td>None</td>
+                </tr>
+
+                <tr>
+                    <td>Detected Events</td>
+                    <td>24</td>
+                </tr>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CONCLUSION -->
+
+<div class="conclusion">
+
+    <strong>Conclusion</strong><br>
+
+    Signal quality is considered good and suitable for downstream
+    analysis. No major artefacts or acquisition issues were observed.
+
+</div>
+
+<!-- FOOTER -->
+
+<div class="footer">
+
+    Generated automatically by COMPANY Analysis Suite
+
+</div>
+
+</body>
+</html>
