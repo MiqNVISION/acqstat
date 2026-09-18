@@ -238,7 +238,6 @@ class MainWindow(QWidget):
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
             duration = len(df) / srate if srate else 0
-4
             
             summary = (
                 f"Version: {ver}\n"
@@ -251,6 +250,7 @@ class MainWindow(QWidget):
             # Store in class
             self.df = df
             self.srate = srate
+            self.version = ver
             self.duration = duration
             self.filename = filename
             self.file_id = Path(filename).stem
