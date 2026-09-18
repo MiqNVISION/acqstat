@@ -52,8 +52,9 @@ class MainWindow(QWidget):
         
         # Report button
         self.report_button = QPushButton("Report")
-        self.report_button.setEnabled(False)
         self.report_button.clicked.connect(self.generate_report)
+        self.report_button.setEnabled(False)
+
 
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
@@ -190,6 +191,9 @@ class MainWindow(QWidget):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
             
+            self.report_button.setEnabled(False)
+
+            
             # Metadata
             metadata_lines = []
             with open(file_path, "r") as f:
@@ -238,7 +242,6 @@ class MainWindow(QWidget):
                 f"Duration: {duration:.2f} sec\n\n"
             )
             
-            
             # Store in class
             self.df = df
             self.srate = srate
@@ -265,6 +268,7 @@ class MainWindow(QWidget):
                     self.channels_layout.addWidget(card)
             self.stats.setText(summary)
             
+            # Enable report button
             self.report_button.setEnabled(True)
 app = QApplication(sys.argv)
 app.setWindowIcon(QIcon("NV.ico"))
