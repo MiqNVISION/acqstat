@@ -264,6 +264,8 @@ class MainWindow(QWidget):
                 if ("ANA" not in col) and ("AC" not in col):
                     self.channels_layout.addWidget(card)
             self.stats.setText(summary)
+            
+            self.report_button.setEnabled(True)
 app = QApplication(sys.argv)
 app.setWindowIcon(QIcon("NV.ico"))
 
