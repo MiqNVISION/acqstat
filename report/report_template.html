@@ -168,8 +168,8 @@ td {
     <div class="report-title">
         <h1>Recording Analysis Report</h1>
         <div class="small">
-            Subject: REC-001<br>
-            Date: 2026-09-11
+            Subject: {{FILE_ID}}<br>
+            Date: {{DATE}}
         </div>
     </div>
 
@@ -180,22 +180,22 @@ td {
 <div class="kpis">
 
     <div class="card">
-        <div class="card-value">15 min</div>
+        <div class="card-value">{{DURATION}}</div>
         <div class="card-label">Duration</div>
     </div>
 
     <div class="card">
-        <div class="card-value">250 Hz</div>
+        <div class="card-value">{{SRATE}} Hz</div>
         <div class="card-label">Sample Rate</div>
     </div>
 
     <div class="card">
-        <div class="card-value">93%</div>
+        <div class="card-value">{{QUALITY}}</div>
         <div class="card-label">Quality</div>
     </div>
 
     <div class="card">
-        <div class="card-value">18.3 dB</div>
+        <div class="card-value">{{SNR}}</div>
         <div class="card-label">SNR</div>
     </div>
 
@@ -207,12 +207,7 @@ td {
 
     <h2>Key Findings</h2>
 
-    <ul>
-        <li>Recording quality was sufficient for analysis.</li>
-        <li>No missing samples detected.</li>
-        <li>Low motion artefact content.</li>
-        <li>Overall signal stability was high.</li>
-    </ul>
+    {{KEY_FINDINGS}}
 
 </div>
 
@@ -222,7 +217,7 @@ td {
 
     <h2>Signal Overview</h2>
 
-    overview.png
+    {{OVERVIEW_PLOT}}
 
 </div>
 
@@ -236,7 +231,7 @@ td {
 
             <h3>Spectrum</h3>
 
-            spectrum.png
+            {{SPECTRUM_PLOT}}
 
         </div>
 
@@ -249,35 +244,37 @@ td {
             <h3>Quality Metrics</h3>
 
             <table>
+
                 <tr>
                     <td>Mean Value</td>
-                    <td>0.12</td>
+                    <td>{{MEAN}}</td>
                 </tr>
 
                 <tr>
                     <td>RMS</td>
-                    <td>0.67</td>
+                    <td>{{RMS}}</td>
                 </tr>
 
                 <tr>
                     <td>SNR</td>
-                    <td>18.3 dB</td>
+                    <td>{{SNR}}</td>
                 </tr>
 
                 <tr>
                     <td>Missing Samples</td>
-                    <td>0</td>
+                    <td>{{MISSING}}</td>
                 </tr>
 
                 <tr>
                     <td>Clipping</td>
-                    <td>None</td>
+                    <td>{{CLIPPING}}</td>
                 </tr>
 
                 <tr>
                     <td>Detected Events</td>
-                    <td>24</td>
+                    <td>{{EVENTS}}</td>
                 </tr>
+
             </table>
 
         </div>
@@ -292,8 +289,7 @@ td {
 
     <strong>Conclusion</strong><br>
 
-    Signal quality is considered good and suitable for downstream
-    analysis. No major artefacts or acquisition issues were observed.
+    {{CONCLUSION}}
 
 </div>
 
@@ -301,7 +297,7 @@ td {
 
 <div class="footer">
 
-    Generated automatically by COMPANY Analysis Suite
+    Generated automatically by {{COMPANY}}
 
 </div>
 
