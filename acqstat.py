@@ -160,8 +160,10 @@ class MainWindow(QWidget):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
     def generate_report(self):
-        print("Generate report")
-    
+        outname = Path(self.filename).stem + "_report.png"
+        self.figure.savefig(outname, dpi=150)
+        print(f"Saved: {outname}")    
+
     def plot_chart_wrapper(self, col, limit=None):
         if limit == "1min":
             max_sample = int(self.srate*60)
@@ -231,6 +233,7 @@ class MainWindow(QWidget):
                         
             # Display filename and summary
             filename = Path(file_path).name
+            self.filename = filename
             self.label.setText(f"{filename}\n")
             duration = len(df) / srate if srate else 0
             
