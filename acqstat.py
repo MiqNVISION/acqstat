@@ -159,13 +159,56 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
+#    def generate_report(self):
+#        if not self.figure.axes or not self.figure.axes[0].lines:
+#            print("Nothing to export")
+#            return
+#        outname = self.file_id + "_report.png"
+#        self.figure.savefig(outname, dpi=150)
+#        print(f"Saved: {outname}")    
+
     def generate_report(self):
-        if not self.figure.axes or not self.figure.axes[0].lines:
-            print("Nothing to export")
-            return
-        outname = self.file_id + "_report.png"
-        self.figure.savefig(outname, dpi=150)
-        print(f"Saved: {outname}")    
+
+        with open("report/report_template.html", "r", encoding="utf-8") as f:
+            html = f.read()
+
+        replacements = {
+            "{{FILE_ID}}": self.file_id,
+            "{{DATE}}": self.timestamp,
+            "{{DURATION}}": f"{self.duration:.1f} sec",
+            "{{SRATE}}": str(self.srate),
+
+            "{{QUALITY}}": "N/A",
+            "{{SNR}}": "N/A",
+
+            "{{KEY_FINDINGS}}": """
+            <ul>
+                <li>Report generation prototype.</li>
+                <li>No quality assessment implemented yet.</li>
+            </ul>
+            """,
+
+            "{{OVERVIEW_PLOT}}": "overview.png",
+            "{{SPECTRUM_PLOT}}": "spectrum.png",
+
+            "{{MEAN}}": "N/A",
+            "{{RMS}}": "N/A",
+            "{{MISSING}}": "N/A",
+            "{{CLIPPING}}": "N/A",
+            "{{EVENTS}}": "N/A",
+
+            "{{CONCLUSION}}": "Report generation pipeline operational.",
+
+            "{{COMPANY}}": "INTERA"
+        }
+
+        for key, value in replacements.items():
+            html = html.replace(key, str(value))
+
+        outname = self.file_id + "_report.html"
+
+        with open(outname, "w", encoding="utf-8") as f:
+            f.write(html)
 
     def plot_chart_wrapper(self, col, limit=None):
         if limit == "1min":
@@ -251,6 +294,7 @@ class MainWindow(QWidget):
             self.df = df
             self.srate = srate
             self.version = ver
+            self.timestamp = timestamp
             self.duration = duration
             self.filename = filename
             self.file_id = Path(filename).stem
