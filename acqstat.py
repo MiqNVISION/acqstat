@@ -163,7 +163,7 @@ class MainWindow(QWidget):
         if not self.figure.axes or not self.figure.axes[0].lines:
             print("Nothing to export")
             return
-        outname = Path(self.filename).stem + "_report.png"
+        outname = self.file_id + "_report.png"
         self.figure.savefig(outname, dpi=150)
         print(f"Saved: {outname}")    
 
@@ -236,9 +236,9 @@ class MainWindow(QWidget):
                         
             # Display filename and summary
             filename = Path(file_path).name
-            self.filename = filename
             self.label.setText(f"{filename}\n")
             duration = len(df) / srate if srate else 0
+4
             
             summary = (
                 f"Version: {ver}\n"
@@ -251,6 +251,10 @@ class MainWindow(QWidget):
             # Store in class
             self.df = df
             self.srate = srate
+            self.duration = duration
+            self.filename = filename
+            self.file_id = Path(filename).stem
+
             
             # Compute time
             self.set_time_vect()
