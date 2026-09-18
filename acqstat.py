@@ -160,6 +160,9 @@ class MainWindow(QWidget):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
     def generate_report(self):
+        if not self.figure.axes or not self.figure.axes[0].lines:
+            print("Nothing to export")
+            return
         outname = Path(self.filename).stem + "_report.png"
         self.figure.savefig(outname, dpi=150)
         print(f"Saved: {outname}")    
