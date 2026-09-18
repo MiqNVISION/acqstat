@@ -50,6 +50,11 @@ class MainWindow(QWidget):
         self.stats = QLabel()
         self.stats.setFixedHeight(120)
         
+        # Report button
+        self.report_button = QPushButton("Report")
+        self.report_button.setEnabled(False)
+        self.report_button.clicked.connect(self.generate_report)
+
         self.channels_widget = QWidget()
         self.channels_layout = QHBoxLayout()
         self.channels_widget.setLayout(self.channels_layout)
@@ -63,6 +68,7 @@ class MainWindow(QWidget):
         layout = QVBoxLayout()        
         layout.addWidget(self.label)
         layout.addWidget(self.stats)
+        layout.addWidget(self.report_button)
         layout.addWidget(self.channels_widget)
         layout.addWidget(self.canvas)
         self.setLayout(layout)
@@ -151,6 +157,9 @@ class MainWindow(QWidget):
     
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
+    
+    def generate_report(self):
+        print("Generate report")
     
     def plot_chart_wrapper(self, col, limit=None):
         if limit == "1min":
