@@ -16,6 +16,7 @@ from PyQt6.QtGui import QIcon, QFont
 
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from io import StringIO
 
 # MainWindow class 
 class MainWindow(QWidget):
