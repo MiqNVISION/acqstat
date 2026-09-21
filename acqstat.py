@@ -168,6 +168,35 @@ class MainWindow(QWidget):
 #        self.figure.savefig(outname, dpi=150)
 #        print(f"Saved: {outname}")    
 
+    def generate_svg(self):
+
+        fig = Figure(figsize=(8, 3))
+        ax = fig.add_subplot(111)
+
+        max_sample = min(len(self.df), int(self.srate * 60))
+
+        ax.plot(
+            self.time[:max_sample],
+            self.df[self.df.columns[0]].iloc[:max_sample]
+        )
+
+        ax.set_title(self.file_id)
+        ax.set_xlabel("Time (s)")
+        ax.grid()
+
+        fig.tight_layout()
+
+        svg_buffer = StringIO()
+
+        fig.savefig(
+            svg_buffer,
+            format="svg"
+        )
+
+        svg_text = svg_buffer.getvalue()
+
+        return svg_text[svg_text.find("<svg"):]
+
     def generate_report(self):
 
         with open("report/report_template.html", "r", encoding="utf-8") as f:
@@ -189,7 +218,8 @@ class MainWindow(QWidget):
             </ul>
             """,
 
-            "{{OVERVIEW_PLOT}}": "overview.png",
+#            "{{OVERVIEW_PLOT}}": "overview.png",
+            "{{OVERVIEW_PLOT}}": self.generate_svg(),
             "{{SPECTRUM_PLOT}}": "spectrum.png",
 
             "{{MEAN}}": "N/A",
