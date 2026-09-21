@@ -168,21 +168,43 @@ class MainWindow(QWidget):
 #        self.figure.savefig(outname, dpi=150)
 #        print(f"Saved: {outname}")    
 
-    def generate_svg(self):
+    def generate_svg(self, left_col, right_col, max_sample=None):
 
+        if max_sample is None or  max_sample > len(self.df): 
+            max_sample = int(self.srate * 60)
+        
         fig = Figure(figsize=(8, 3))
-        ax = fig.add_subplot(111)
+        ax1 = fig.add_subplot(111)
+        ax2 = ax1.twinx()
 
-        max_sample = min(len(self.df), int(self.srate * 60))
-
-        ax.plot(
+        ax1.plot(
             self.time[:max_sample],
-            self.df[self.df.columns[0]].iloc[:max_sample]
+            self.df[left_col].iloc[:max_sample],
+            color=self.channel_color(left_col),
+            label=left_col
         )
 
-        ax.set_title(self.file_id)
-        ax.set_xlabel("Time (s)")
-        ax.grid()
+        ax2.plot(
+            self.time[:max_sample],
+            self.df[right_col].iloc[:max_sample],
+            color=self.channel_color(right_col),
+            label=right_col
+        )
+
+        ax1.set_xlabel("Time (s)")
+
+        ax1.set_ylabel(
+            left_col,
+            color=self.channel_color(left_col)
+        )
+
+        ax2.set_ylabel(
+            right_col,
+            color=self.channel_color(right_col)
+        )
+
+        ax1.set_title(self.file_id)
+        ax1.grid()
 
         fig.tight_layout()
 
@@ -197,8 +219,32 @@ class MainWindow(QWidget):
 
         return svg_text[svg_text.find("<svg"):]
 
+    def resolve_column(self, *candidates):
+
+        for col in candidates:
+            if col in self.df.columns:
+                return col
+
+        return None
+
     def generate_report(self):
 
+        # Assign values for plotting
+        breath_col = self.resolve_column("Distance_breath", "d_breath")
+        pulse_col  = self.resolve_column("Distance_pulse", "d_pulse")
+
+        if breath_col and pulse_col:
+            left_col, right_col = breath_col, pulse_col
+        else:
+            left_col = self.resolve_column("I", "I_raw")
+            right_col = self.resolve_column("Q", "Q_raw")
+
+        overview_svg = self.generate_svg(
+            left_col,
+            right_col
+        )
+
+        # Read template
         with open("report/report_template.html", "r", encoding="utf-8") as f:
             html = f.read()
 
@@ -219,7 +265,7 @@ class MainWindow(QWidget):
             """,
 
 #            "{{OVERVIEW_PLOT}}": "overview.png",
-            "{{OVERVIEW_PLOT}}": self.generate_svg(),
+            "{{OVERVIEW_PLOT}}": overview_svg,
             "{{SPECTRUM_PLOT}}": "spectrum.png",
 
             "{{MEAN}}": "N/A",
