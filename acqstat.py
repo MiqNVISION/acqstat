@@ -165,7 +165,7 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
-    def generate_svg_IQ(self, left_col, right_col, max_sample=None):
+    def generate_iq_thumbnail(self, left_col, right_col, max_sample=None):
         return self.generate_svg(
             left_col=left_col,
             right_col=right_col,
@@ -295,7 +295,7 @@ class MainWindow(QWidget):
         breath_col = self.resolve_column("Distance_breath", "d_breath")
         pulse_col  = self.resolve_column("Distance_pulse", "d_pulse")
 
-        key_svg = self.generate_svg_IQ(
+        key_svg = self.generate_iq_thumbnail(
             I_col,
             Q_col, 
             signal_type = "I_Q" 
