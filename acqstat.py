@@ -173,66 +173,6 @@ class MainWindow(QWidget):
 #        self.figure.savefig(outname, dpi=150)
 #        print(f"Saved: {outname}")    
 
-    def generate_svg_old(self, left_col, right_col, plot_type, max_sample=None):
-
-        if max_sample is None or  max_sample > len(self.df): 
-            max_sample = int(self.srate * 60)
-        
-        fig = Figure(figsize=(7.2, 3))
-        ax1 = fig.add_subplot(111)
-        ax2 = ax1.twinx()
-
-        if plot_type == "breath_pulse":
-            left_label = "distance breathing (a.u.)"
-            right_label = "distance pulse (a.u.)"
-        elif plot_type == "I_Q":
-            left_label = "I (V)"
-            right_label = "Q (V)"
-            
-
-        ax1.plot(
-            self.time[:max_sample],
-            self.df[left_col].iloc[:max_sample],
-            color=self.channel_color(left_col),
-            label=left_col
-        )
-
-        ax2.plot(
-            self.time[:max_sample],
-            self.df[right_col].iloc[:max_sample],
-            color=self.channel_color(right_col),
-            label=right_col
-        )
-
-        ax1.set_xlabel("time (s)")
-
-        ax1.set_ylabel(
-            left_label,
-            color=self.channel_color(left_col)
-        )
-
-        ax2.set_ylabel(
-            right_label,
-            color=self.channel_color(right_col)
-        )
-
-        ax1.set_title(self.file_id)
-        ax1.grid()
-
-        fig.tight_layout()
-
-        svg_buffer = StringIO()
-
-        fig.savefig(
-            svg_buffer,
-            format="svg"
-        )
-
-        svg_text = svg_buffer.getvalue()
-
-        return svg_text[svg_text.find("<svg"):]
-
-
     def generate_svg_IQ(self, left_col, right_col, plot_type="I_Q", max_sample=None):
 
         if max_sample is None or  max_sample > len(self.df): 
