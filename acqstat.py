@@ -178,7 +178,7 @@ class MainWindow(QWidget):
         if max_sample is None or  max_sample > len(self.df): 
             max_sample = int(self.srate * 60)
         
-        fig = Figure(figsize=(8, 3))
+        fig = Figure(figsize=(7.2, 3))
         ax1 = fig.add_subplot(111)
         ax2 = ax1.twinx()
 
