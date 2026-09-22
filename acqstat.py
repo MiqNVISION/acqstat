@@ -169,7 +169,7 @@ class MainWindow(QWidget):
         return self.generate_svg(
             left_col=left_col,
             right_col=right_col,
-            plot_type="I_Q",
+            signal_type="I_Q",
             max_sample=max_sample,
             figsize=(3, 2),
             layout="twinx",
@@ -180,7 +180,7 @@ class MainWindow(QWidget):
         self,
         left_col,
         right_col,
-        plot_type="I_Q",
+        signal_type="I_Q",
         max_sample=None,
         figsize=(7.2, 3),
         layout="stacked",   # "stacked" or "twinx"
@@ -194,10 +194,10 @@ class MainWindow(QWidget):
                 else min(len(self.df), int(self.srate * 60))
             )
 
-        if plot_type == "breath_pulse":
+        if signal_type == "breath_pulse":
             left_label = "breathing" + r"$_{dist}$" + " (a.u.)"
             right_label = "pulse" + r"$_{dist}$" + " (a.u.)"
-        elif plot_type == "I_Q":
+        elif signal_type == "I_Q":
             left_label = "I (V)"
             right_label = "Q (V)"
        
@@ -298,20 +298,20 @@ class MainWindow(QWidget):
         key_svg = self.generate_svg_IQ(
             I_col,
             Q_col, 
-            plot_type = "I_Q" 
+            signal_type = "I_Q" 
         )
         
         if breath_col and pulse_col:
             left_col, right_col = breath_col, pulse_col
-            plot_type = "breath_pulse" 
+            signal_type = "breath_pulse" 
         else:
             left_col, right_col = I_col, Q_col
-            plot_type = "I_Q"
+            signal_type = "I_Q"
 
         overview_svg = self.generate_svg(
             left_col,
             right_col, 
-            plot_type
+            signal_type
         )
         
 
