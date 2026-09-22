@@ -232,6 +232,62 @@ class MainWindow(QWidget):
 
         return svg_text[svg_text.find("<svg"):]
 
+
+    def generate_svg_IQ(self, left_col, right_col, plot_type="I_Q", max_sample=None):
+
+        if max_sample is None or  max_sample > len(self.df): 
+            max_sample = len(self.df)
+        
+        fig = Figure(figsize=(3, 2))
+        ax1 = fig.add_subplot(111)
+        ax2 = ax1.twinx()
+
+        left_label = "I (V)"
+        right_label = "Q (V)"
+            
+        ax1.plot(
+            self.time[:max_sample],
+            self.df[left_col].iloc[:max_sample],
+            color=self.channel_color(left_col),
+            label=left_col
+        )
+
+        ax2.plot(
+            self.time[:max_sample],
+            self.df[right_col].iloc[:max_sample],
+            color=self.channel_color(right_col),
+            label=right_col
+        )
+
+        ax1.set_xlabel("time (s)")
+
+        ax1.set_ylabel(
+            left_label,
+            color=self.channel_color(left_col)
+        )
+
+        ax2.set_ylabel(
+            right_label,
+            color=self.channel_color(right_col)
+        )
+
+        ax1.set_title("I/Q recording")
+        ax1.grid()
+
+        fig.tight_layout()
+
+        svg_buffer = StringIO()
+
+        fig.savefig(
+            svg_buffer,
+            format="svg"
+        )
+
+        svg_text = svg_buffer.getvalue()
+
+        return svg_text[svg_text.find("<svg"):]
+
+
     def generate_svg(self, left_col, right_col, plot_type, max_sample=None):
 
         if max_sample is None or  max_sample > len(self.df): 
@@ -311,15 +367,22 @@ class MainWindow(QWidget):
     def generate_report(self):
 
         # Assign values for plotting
+        I_col = self.resolve_column("I", "I_raw")
+        Q_col = self.resolve_column("Q", "Q_raw")
         breath_col = self.resolve_column("Distance_breath", "d_breath")
         pulse_col  = self.resolve_column("Distance_pulse", "d_pulse")
 
+        key_svg = self.generate_svg_IQ(
+            I_col,
+            Q_col, 
+            plot_type = "I_Q" 
+        )
+        
         if breath_col and pulse_col:
             left_col, right_col = breath_col, pulse_col
             plot_type = "breath_pulse" 
         else:
-            left_col = self.resolve_column("I", "I_raw")
-            right_col = self.resolve_column("Q", "Q_raw")
+            left_col, right_col = I_col, Q_col
             plot_type = "I_Q"
 
         overview_svg = self.generate_svg(
@@ -327,6 +390,8 @@ class MainWindow(QWidget):
             right_col, 
             plot_type
         )
+        
+
 
         # Read template
         with open("report/report_template.html", "r", encoding="utf-8") as f:
@@ -347,6 +412,9 @@ class MainWindow(QWidget):
                 <li>No quality assessment implemented yet.</li>
             </ul>
             """,
+
+            "{{KEY_PLOT}}": key_svg,
+
 
 #            "{{OVERVIEW_PLOT}}": "overview.png",
             "{{OVERVIEW_PLOT}}": overview_svg,

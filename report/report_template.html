@@ -71,11 +71,21 @@ h1, h2, h3 {
 /* Summary */
 
 .summary {
+	display: flex;
     border: 1px solid #d0d0d0;
     border-radius: 6px;
     padding: 10px;
     margin-bottom: 15px;
 }
+
+.key {
+	flex: 1;	
+}
+
+.key-mini-plot{
+	flex = 1;
+}
+
 
 /* Main plot */
 
@@ -203,10 +213,15 @@ td {
 
 <div class="summary">
 
-    <h2>Key Findings</h2>
-
+    <div class="key">
+	<h2>Key Findings</h2>
     {{KEY_FINDINGS}}
+    </div>
 
+	<div class="key-mini-plot">
+	{{KEY_PLOT}}
+	</div>
+	
 </div>
 
 <!-- MAIN PLOT -->
@@ -249,11 +264,6 @@ td {
                 </tr>
 
                 <tr>
-                    <td>RMS</td>
-                    <td>{{RMS}}</td>
-                </tr>
-
-                <tr>
                     <td>SNR</td>
                     <td>{{SNR}}</td>
                 </tr>
@@ -261,11 +271,6 @@ td {
                 <tr>
                     <td>Missing Samples</td>
                     <td>{{MISSING}}</td>
-                </tr>
-
-                <tr>
-                    <td>Clipping</td>
-                    <td>{{CLIPPING}}</td>
                 </tr>
 
                 <tr>
