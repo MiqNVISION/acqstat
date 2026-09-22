@@ -87,7 +87,7 @@ def get_respiratory_rate(
     else:
         raise ValueError("mode must be 'biosppy' or 'scipy'.")
 
-    return br_idx, br_bpmi
+    return br_idx, br_bpm
 
 def smooth(y, box_pts):
     box = np.ones(box_pts) / box_pts

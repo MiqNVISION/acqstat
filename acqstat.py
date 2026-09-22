@@ -170,7 +170,7 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
         
-    def compute_respiratory_rate(d_breath, srate, win_sec = 30.0):
+    def compute_respiratory_rate(self, d_breath, srate, win_sec = 30.0):
         win_samples = int(win_sec*srate)
         step_samples = int(srate*1.0)
         win_i = 0
@@ -178,24 +178,25 @@ class MainWindow(QWidget):
         br_list = []
         br_times = []
         for start in range(0,len(d_breath)-win_samples+1, step_samples):
-            print(win_i)
+            # print(win_i)
             win_i += 1
             stop = start + win_samples
-            win = df['d_breath'].iloc[start:stop]
+            win = d_breath.iloc[start:stop]
             q75, q25 = np.percentile(win, [75 ,25])
             iqr = q75 - q25
             br_idx, br_rate = get_respiratory_rate(win, mode='scipy', apply_smooth=False)
             br_mean = np.nanmean(br_rate)
-            print(iqr)
-            print(br_idx)
-            print(br_rate)
-            print("avg = ", br_mean)
+            # print(iqr)
+            # print(br_idx)
+            # print(br_rate)
+            # print("avg = ", br_mean)
             if br_mean<0 or br_mean==np.nan:
                 colval.append('green')
             else:
                 colval.append('red')
+            br_list.append(br_mean)    
             br_times.append((stop-1)/srate)
-        return br_list, br_times
+        return np.array(br_list), np.array(br_times)
         
     
     def generate_iq_thumbnail(self, left_col, right_col, max_sample=None):
@@ -491,8 +492,9 @@ class MainWindow(QWidget):
             breath_col = self.resolve_column("d_breath", "Distance_breath")
             if breath_col != None:
                 breath_val = self.df[breath_col]
-            #if resp_rate = compute_respiratory_rate(srate=srate, d_breath,win_sec = 30.0):
-
+                resp_rate, xval = self.compute_respiratory_rate(breath_val, srate, win_sec=30.)
+                print (resp_rate)
+                print (xval)
  
             # Compute time
             self.set_time_vect()
