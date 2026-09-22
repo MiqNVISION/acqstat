@@ -165,60 +165,16 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
-    def generate_svg_IQ(self, left_col, right_col, plot_type="I_Q", max_sample=None):
-
-        if max_sample is None or  max_sample > len(self.df): 
-            max_sample = len(self.df)
-        
-        fig = Figure(figsize=(3, 2))
-        ax1 = fig.add_subplot(111)
-        ax2 = ax1.twinx()
-
-        left_label = "I (V)"
-        right_label = "Q (V)"
-            
-        ax1.plot(
-            self.time[:max_sample],
-            self.df[left_col].iloc[:max_sample],
-            color=self.channel_color(left_col),
-            label=left_col
+    def generate_svg_IQ(self, left_col, right_col, max_sample=None):
+        return self.generate_svg(
+            left_col=left_col,
+            right_col=right_col,
+            plot_type="I_Q",
+            max_sample=max_sample,
+            figsize=(3, 2),
+            layout="twinx",
+            title="I/Q recording",
         )
-
-        ax2.plot(
-            self.time[:max_sample],
-            self.df[right_col].iloc[:max_sample],
-            color=self.channel_color(right_col),
-            label=right_col
-        )
-
-        ax1.set_xlabel("time (s)")
-
-        ax1.set_ylabel(
-            left_label,
-            color=self.channel_color(left_col)
-        )
-
-        ax2.set_ylabel(
-            right_label,
-            color=self.channel_color(right_col)
-        )
-
-        ax1.set_title("I/Q recording")
-        ax1.grid()
-
-        fig.tight_layout()
-
-        svg_buffer = StringIO()
-
-        fig.savefig(
-            svg_buffer,
-            format="svg"
-        )
-
-        svg_text = svg_buffer.getvalue()
-
-        return svg_text[svg_text.find("<svg"):]
-
 
     def generate_svg(
         self,
