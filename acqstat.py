@@ -323,6 +323,7 @@ class MainWindow(QWidget):
             "{{FILE_ID}}": self.file_id,
             "{{DATE}}": self.timestamp,
             "{{DURATION}}": f"{self.duration:.1f} sec",
+            "{{DURATION-STRING}}": f"{self.duration_string}",
             "{{SRATE}}": str(self.srate),
 
             "{{QUALITY}}": "N/A",
@@ -432,6 +433,7 @@ class MainWindow(QWidget):
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
             duration = len(df) / srate if srate else 0
+            duration_string = f"{int(duration)//3600:02d}h {(int(duration)%3600)//60:02d}min {duration%60:5.2f}sec"
             
             summary = (
                 f"Version: {ver}\n"
@@ -440,6 +442,10 @@ class MainWindow(QWidget):
                 f"Columns: {len(df.columns)}\n"
                 f"Duration: {duration:.2f} sec\n\n"
             )
+            #TODO print(f"{hours:02d}:{minutes:02d}:{seconds:02d}"); 
+            # hours = seconds // 3600
+            # minutes = (seconds % 3600) // 60
+            # seconds = seconds % 60
             
             # Store in class
             self.df = df
@@ -447,6 +453,7 @@ class MainWindow(QWidget):
             self.version = ver
             self.timestamp = timestamp
             self.duration = duration
+            self.duration_string = duration_string
             self.filename = filename
             self.file_id = Path(filename).stem
 

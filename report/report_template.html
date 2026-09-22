@@ -63,6 +63,11 @@ h1, h2, h3 {
     color: #1f4e79;
 }
 
+.card-caption {
+    font-size: 14pt;
+    font-style: italic;
+}
+
 .card-label {
     font-size: 9pt;
     color: #666;
@@ -189,7 +194,8 @@ td {
 
     <div class="card">
         <div class="card-value">{{DURATION}}</div>
-        <div class="card-label">Duration</div>
+		<div class="card-caption">{{DURATION-STRING}}</div>
+		<div class="card-label">Duration</div>
     </div>
 
     <div class="card">
