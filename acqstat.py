@@ -493,8 +493,8 @@ class MainWindow(QWidget):
             if breath_col != None:
                 breath_val = self.df[breath_col]
                 resp_rate, xval = self.compute_respiratory_rate(breath_val, srate, win_sec=30.)
-                print (resp_rate)
-                print (xval)
+                # print (resp_rate)
+                # print (xval)
  
             # Compute time
             self.set_time_vect()
