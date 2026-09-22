@@ -169,6 +169,34 @@ class MainWindow(QWidget):
     
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
+        
+    def compute_respiratory_rate(d_breath, srate, win_sec = 30.0):
+        win_samples = int(win_sec*srate)
+        step_samples = int(srate*1.0)
+        win_i = 0
+        colval = []
+        br_list = []
+        br_times = []
+        for start in range(0,len(d_breath)-win_samples+1, step_samples):
+            print(win_i)
+            win_i += 1
+            stop = start + win_samples
+            win = df['d_breath'].iloc[start:stop]
+            q75, q25 = np.percentile(win, [75 ,25])
+            iqr = q75 - q25
+            br_idx, br_rate = get_respiratory_rate(win, mode='scipy', apply_smooth=False)
+            br_mean = np.nanmean(br_rate)
+            print(iqr)
+            print(br_idx)
+            print(br_rate)
+            print("avg = ", br_mean)
+            if br_mean<0 or br_mean==np.nan:
+                colval.append('green')
+            else:
+                colval.append('red')
+            br_times.append((stop-1)/srate)
+        return br_list, br_times
+        
     
     def generate_iq_thumbnail(self, left_col, right_col, max_sample=None):
         return self.generate_svg(
@@ -427,13 +455,13 @@ class MainWindow(QWidget):
                 
             skiprow_n = (len(metadata_lines))
             
-            # Load recording CSV data (deending on header)
+            # Load recording CSV data (depending on header)
             if colnames == None or colnames == "":
                 df = pd.read_csv(file_path, skiprows=skiprow_n)
             else:
                 colnames = colnames.split(",")
                 df = pd.read_csv(file_path, skiprows=skiprow_n, names=colnames)
-                        
+  
             # Display filename and summary
             filename = Path(file_path).name
             self.label.setText(f"{filename}\n")
@@ -458,7 +486,14 @@ class MainWindow(QWidget):
             self.filename = filename
             self.file_id = Path(filename).stem
 
-            
+            # Respiratory rate
+            resp_rate = None
+            breath_col = self.resolve_column("d_breath", "Distance_breath")
+            if breath_col != None:
+                breath_val = self.df[breath_col]
+            #if resp_rate = compute_respiratory_rate(srate=srate, d_breath,win_sec = 30.0):
+
+ 
             # Compute time
             self.set_time_vect()
             
