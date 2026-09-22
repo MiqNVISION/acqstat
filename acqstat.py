@@ -297,8 +297,7 @@ class MainWindow(QWidget):
 
         key_svg = self.generate_iq_thumbnail(
             I_col,
-            Q_col, 
-            signal_type = "I_Q" 
+            Q_col 
         )
         
         if breath_col and pulse_col:
