@@ -196,7 +196,7 @@ class MainWindow(QWidget):
             label=right_col
         )
 
-        ax1.set_xlabel("Time (s)")
+        ax1.set_xlabel("time (s)")
 
         ax1.set_ylabel(
             left_col,
