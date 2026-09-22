@@ -220,74 +220,109 @@ class MainWindow(QWidget):
         return svg_text[svg_text.find("<svg"):]
 
 
-    def generate_svg(self, left_col, right_col, plot_type, max_sample=None):
-
-        if max_sample is None or  max_sample > len(self.df): 
-            max_sample = int(self.srate * 60)
+    def generate_svg(
+        self,
+        left_col,
+        right_col,
+        plot_type="I_Q",
+        max_sample=None,
+        figsize=(7.2, 3),
+        layout="stacked",   # "stacked" or "twinx"
+        title=None
+        ):
         
-        fig = Figure(figsize=(7.2, 3))
-        ax1 = fig.add_subplot(211)
-        ax2 = fig.add_subplot(212)
+        if max_sample is None or max_sample > len(self.df):
+            max_sample = (
+                len(self.df)
+                if layout == "twinx"
+                else min(len(self.df), int(self.srate * 60))
+            )
 
         if plot_type == "breath_pulse":
-            left_label = "breathing" + r"$_{dist}$" +" (a.u.)"
-
-            right_label = "pulse" + r"$_{dist}$" +" (a.u.)"
+            left_label = "breathing" + r"$_{dist}$" + " (a.u.)"
+            right_label = "pulse" + r"$_{dist}$" + " (a.u.)"
         elif plot_type == "I_Q":
             left_label = "I (V)"
             right_label = "Q (V)"
-            
+       
+        fig = Figure(figsize=figsize)
 
-        ax1.plot(
-            self.time[:max_sample],
-            self.df[left_col].iloc[:max_sample],
-            color=self.channel_color(left_col),
-            label=left_col
-        )
+        if layout == "twinx":
+            ax1 = fig.add_subplot(111)
+            ax2 = ax1.twinx()
 
-        ax2.plot(
-            self.time[:max_sample],
-            self.df[right_col].iloc[:max_sample],
-            color=self.channel_color(right_col),
-            label=right_col
-        )
+            ax1.plot(
+                self.time[:max_sample],
+                self.df[left_col].iloc[:max_sample],
+                color=self.channel_color(left_col),
+            )
 
-        ax1.set_xlabel("time (s)")
+            ax2.plot(
+                self.time[:max_sample],
+                self.df[right_col].iloc[:max_sample],
+                color=self.channel_color(right_col),
+            )
 
-        ax1.set_ylabel(
-            left_label,
-            color=self.channel_color(left_col),
-            rotation=0, 
-            ha = "left"
-        )
+            ax1.set_xlabel("time (s)")
+            ax1.set_ylabel(
+                left_label,
+                color=self.channel_color(left_col),
+            )
+            ax2.set_ylabel(
+                right_label,
+                color=self.channel_color(right_col),
+            )
 
-        ax2.set_ylabel(
-            right_label,
-            color=self.channel_color(right_col), 
-            rotation=0,
-            ha = "left"
-        )
-        
-        ax1.yaxis.set_label_coords(-0.08, 1.02)
-        ax2.yaxis.set_label_coords(-0.08, 1.02)
+            ax1.grid()
+            ax1.set_title(title or "I/Q recording")
 
-        ax1.set_title(self.file_id)
-        ax1.grid()
-        ax2.grid()
+        else:  # stacked
+            ax1 = fig.add_subplot(211)
+            ax2 = fig.add_subplot(212)
+
+            ax1.plot(
+                self.time[:max_sample],
+                self.df[left_col].iloc[:max_sample],
+                color=self.channel_color(left_col),
+            )
+
+            ax2.plot(
+                self.time[:max_sample],
+                self.df[right_col].iloc[:max_sample],
+                color=self.channel_color(right_col),
+            )
+
+            ax1.set_xlabel("time (s)")
+
+            ax1.set_ylabel(
+                left_label,
+                color=self.channel_color(left_col),
+                rotation=0,
+                ha="left",
+            )
+
+            ax2.set_ylabel(
+                right_label,
+                color=self.channel_color(right_col),
+                rotation=0,
+                ha="left",
+            )
+
+            ax1.yaxis.set_label_coords(-0.08, 1.02)
+            ax2.yaxis.set_label_coords(-0.08, 1.02)
+
+            ax1.grid()
+            ax2.grid()
+            ax1.set_title(title or self.file_id)
 
         fig.tight_layout()
 
         svg_buffer = StringIO()
-
-        fig.savefig(
-            svg_buffer,
-            format="svg"
-        )
+        fig.savefig(svg_buffer, format="svg")
 
         svg_text = svg_buffer.getvalue()
-
         return svg_text[svg_text.find("<svg"):]
-
+        
     def resolve_column(self, *candidates):
 
         for col in candidates:
