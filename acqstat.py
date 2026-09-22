@@ -113,6 +113,11 @@ class MainWindow(QWidget):
                 border-radius: 4px;
                 padding: 4px;
             }
+
+            QPushButton:pressed {
+                background-color: #8fc98f;
+                border: 1px solid #72b572;
+            }
         """)
         
 
