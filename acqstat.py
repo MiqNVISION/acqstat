@@ -442,10 +442,6 @@ class MainWindow(QWidget):
                 f"Columns: {len(df.columns)}\n"
                 f"Duration: {duration:.2f} sec\n\n"
             )
-            #TODO print(f"{hours:02d}:{minutes:02d}:{seconds:02d}"); 
-            # hours = seconds // 3600
-            # minutes = (seconds % 3600) // 60
-            # seconds = seconds % 60
             
             # Store in class
             self.df = df
