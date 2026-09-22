@@ -137,7 +137,11 @@ class MainWindow(QWidget):
 
         if col in ["ECG", "HR", "Annotation"]:
             card.setObjectName("processed")
+        
+        if col in ["d", "d_breath", "d_pulse", "d_hsound"]:
+            card.setObjectName("processed")
 
+        
         layout = QVBoxLayout()
         
         button = QPushButton("Plot " + col)
