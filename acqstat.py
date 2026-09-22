@@ -175,7 +175,7 @@ class MainWindow(QWidget):
             right_col=right_col,
             signal_type="I_Q",
             max_sample=max_sample,
-            figsize=(3.5, 2),
+            figsize=(4, 2),
             layout="twinx",
             title="I/Q recording",
         )
