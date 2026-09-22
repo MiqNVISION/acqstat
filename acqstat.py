@@ -173,7 +173,7 @@ class MainWindow(QWidget):
 #        self.figure.savefig(outname, dpi=150)
 #        print(f"Saved: {outname}")    
 
-    def generate_svg(self, left_col, right_col, max_sample=None):
+    def generate_svg(self, left_col, right_col, plot_type, max_sample=None):
 
         if max_sample is None or  max_sample > len(self.df): 
             max_sample = int(self.srate * 60)
@@ -181,6 +181,14 @@ class MainWindow(QWidget):
         fig = Figure(figsize=(8, 3))
         ax1 = fig.add_subplot(111)
         ax2 = ax1.twinx()
+
+        if plot_type == "breath_pulse":
+            left_label = "distance breathing (a.u.)"
+            right_label = "distance pulse (a.u.)"
+        elif plot_type == "I_Q":
+            left_label = "I (V)"
+            right_label = "Q (V)"
+            
 
         ax1.plot(
             self.time[:max_sample],
@@ -199,12 +207,12 @@ class MainWindow(QWidget):
         ax1.set_xlabel("time (s)")
 
         ax1.set_ylabel(
-            left_col,
+            left_label,
             color=self.channel_color(left_col)
         )
 
         ax2.set_ylabel(
-            right_col,
+            right_label,
             color=self.channel_color(right_col)
         )
 
@@ -240,13 +248,16 @@ class MainWindow(QWidget):
 
         if breath_col and pulse_col:
             left_col, right_col = breath_col, pulse_col
+            plot_type = "breath_pulse" 
         else:
             left_col = self.resolve_column("I", "I_raw")
             right_col = self.resolve_column("Q", "Q_raw")
+            plot_type = "I_Q"
 
         overview_svg = self.generate_svg(
             left_col,
-            right_col
+            right_col, 
+            plot_type
         )
 
         # Read template
