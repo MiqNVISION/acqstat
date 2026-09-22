@@ -165,14 +165,6 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
     
-#    def generate_report(self):
-#        if not self.figure.axes or not self.figure.axes[0].lines:
-#            print("Nothing to export")
-#            return
-#        outname = self.file_id + "_report.png"
-#        self.figure.savefig(outname, dpi=150)
-#        print(f"Saved: {outname}")    
-
     def generate_svg_IQ(self, left_col, right_col, plot_type="I_Q", max_sample=None):
 
         if max_sample is None or  max_sample > len(self.df): 
