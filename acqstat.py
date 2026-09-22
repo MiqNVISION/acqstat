@@ -17,6 +17,7 @@ from PyQt6.QtGui import QIcon, QFont
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from io import StringIO
+from get_respiratory_rate import get_respiratory_rate, smooth
 
 # MainWindow class 
 class MainWindow(QWidget):
