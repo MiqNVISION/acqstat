@@ -217,7 +217,7 @@ class MainWindow(QWidget):
         signal_type="I_Q",
         max_sample=None,
         figsize=(7.2, 3),
-        layout="stacked",   # "stacked" or "twinx"
+        layout="stacked-breath",   # "stacked" or "twinx"
         title=None
         ):
         
@@ -267,6 +267,90 @@ class MainWindow(QWidget):
             ax1.grid()
             ax1.set_title(title or "I/Q recording")
 
+        elif layout == "stacked-breath":
+                minutes = int(np.ceil(self.duration / 60))
+                fig = Figure(figsize=(8, minutes * 1.8))
+                axes = []
+                breath = self.df[left_col]
+
+                ymin = breath.min()
+                ymax = breath.max()
+
+                samples_per_min = int(self.srate * 60)
+                for m in range(minutes):
+
+                    ax = fig.add_subplot(minutes, 1, m + 1)
+
+                    start = m * samples_per_min
+                    stop = min((m + 1) * samples_per_min, len(breath))
+
+                    if stop <= start:
+                        continue
+
+                    t_local = self.time[start:stop] - m * 60
+
+                    ax.plot(
+                        t_local,
+                        breath.iloc[start:stop],
+                        color=self.channel_color(left_col)
+                    )
+
+                    # Respiratory rate overlay
+                    if self.resp_rate is not None:
+
+                        axRR = ax.twinx()
+
+                        mask = (
+                            (self.resp_t >= m*60) &
+                            (self.resp_t < (m+1)*60)
+                        )
+
+                        rr_t = self.resp_t[mask] - m*60
+                        rr_v = self.resp_rate[mask]
+
+                        axRR.plot(
+                            rr_t,
+                            rr_v,
+                            color='red',
+                            marker='+',
+                            linestyle='-'
+                        )
+
+                        axRR.set_ylim([6, 30])
+
+                        axRR.set_ylabel(
+                            'RRate',
+                             color='red',
+                             alpha=0.7
+                            )
+
+                        axRR.grid(
+                            color='red',
+                            alpha=0.5,
+                            linestyle='--',
+                            linewidth=0.5
+                        )
+
+                    ax.set_ylim(ymin, ymax)
+
+                    ax.grid(alpha=0.3)
+
+                    ax.set_xlim(0, 60)
+
+                    ax.set_ylabel(
+                        f"{left_label} {m}-{m+1}m",
+                        color=self.channel_color(left_col),
+                        rotation=0,
+                        ha="left"
+                    )
+                    ax.yaxis.set_label_coords(-0.08, 1.02)
+
+
+                    if m != minutes - 1:
+                        ax.set_xticklabels([])
+                    else:
+                        ax.set_xlabel("time (s)")
+                    axes.append(ax)
         else:  # stacked
             ax1 = fig.add_subplot(211)
             ax2 = fig.add_subplot(212)
