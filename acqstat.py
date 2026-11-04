@@ -217,7 +217,7 @@ class MainWindow(QWidget):
         signal_type="I_Q",
         max_sample=None,
         figsize=(7.2, 3),
-        layout="stacked-breath",   # "stacked" or "twinx"
+        layout="stacked-breath",   # "stacked" #(legacy) or "twinx"
         title=None
         ):
         
@@ -228,7 +228,7 @@ class MainWindow(QWidget):
                 else min(len(self.df), int(self.srate * 60))
             )
 
-        # TODO Add BR plot if breath_pulse
+        # Add BR plot if breath_pulse
         if signal_type == "breath_pulse":
             left_label = "breathing" + r"$_{dist}$" + " (a.u.)"
             right_label = "pulse" + r"$_{dist}$" + " (a.u.)"
@@ -351,7 +351,7 @@ class MainWindow(QWidget):
                     else:
                         ax.set_xlabel("time (s)")
                     axes.append(ax)
-        else:  # stacked
+        else:  # stacked (legacy 1 min RRate plotting)
             ax1 = fig.add_subplot(211)
             ax2 = fig.add_subplot(212)
 
@@ -360,7 +360,7 @@ class MainWindow(QWidget):
                 self.df[left_col].iloc[:max_sample],
                 color=self.channel_color(left_col),
             )
-            # TODO RESP RATE
+            # RESP RATE
             axRR = ax1.twinx()
             axRR.plot(self.resp_t[self.resp_t<60], self.resp_rate[self.resp_t<60], color = 'red', marker='+', linestyle='-')
             axRR.set_ylabel('RRate', color='red', alpha=0.7)
@@ -588,6 +588,7 @@ class MainWindow(QWidget):
             if breath_col != None:
                 breath_val = self.df[breath_col]
                 resp_rate, resp_t = self.compute_respiratory_rate(breath_val, srate, win_sec=30.)
+                print ("RR -----------------")
                 print (resp_rate)
                 print (resp_t)
                 self.resp_rate = resp_rate
