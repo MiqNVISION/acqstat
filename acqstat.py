@@ -334,7 +334,7 @@ class MainWindow(QWidget):
                         (self.resp_peak_t < (m+1)*60)
                         )
                         axRR.text(
-                        0.98, 0.85, f'{len(self.resp_peak_t[maskRR])-1} bpm',
+                        0.98, 0.85, f'{60*(len(self.resp_peak_t[maskRR])-1)/(self.resp_peak_t[maskRR][-1]-self.resp_peak_t[maskRR][0]):4.1f} bpm',
                         transform=axRR.transAxes,
                         ha='right', va='bottom',
                         bbox=dict(boxstyle='square,pad=0.2',facecolor='wheat', alpha=0.5, edgecolor='black')
