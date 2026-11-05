@@ -124,13 +124,20 @@ class MainWindow(QWidget):
 
 
     def channel_color(self, col):
+        """
+        Return the display color associated with a channel name.
+        Matplotlib-compatible color name.
+        """
         for key, color in self.colors.items():
             if key in col:
                 return color
         return "black"
 
     def create_channel_card(self, col, min_val, max_val, mean_val, std_val):
-
+        """
+        Create a GUI summary card for a signal channel.
+        Each card displays basic signal statistics
+        """
         card = QGroupBox(col)
 
         if "distance" in col.lower() or "filter" in col.lower():
@@ -168,9 +175,36 @@ class MainWindow(QWidget):
         return card
     
     def set_time_vect(self):
+        """
+        Generate a time vector for the loaded recording.
+        """
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
-        
+            
     def compute_respiratory_rate_mean(self, d_breath, srate, win_sec = 30.0):
+        """
+        Estimate respiratory rate using sliding-window analysis.
+
+        The breathing signal is analysed in overlapping windows.
+        For each window, respiratory peaks and instantaneous
+        respiratory rate are estimated using get_respiratory_rate().
+        Mean respiratory rate per window and peak timestamps are
+        retained for visualisation and reporting.
+
+        Parameters
+        ----------
+        d_breath : pandas.Series
+            Breathing-related distance signal.
+        srate : float
+            Sampling frequency in Hz.
+        win_sec : float, optional
+            Analysis window length in seconds.
+
+        Returns
+        -------
+        tuple[np.ndarray, np.ndarray]
+            Respiratory rate values and their corresponding
+            timestamps.
+        """
         win_samples = int(win_sec*srate)
         step_samples = int(srate*1.0)
         win_i = 0
@@ -204,6 +238,26 @@ class MainWindow(QWidget):
         
     
     def generate_iq_thumbnail(self, left_col, right_col, max_sample=None):
+        """
+        Generate a compact SVG preview of I/Q signals.
+
+        This helper wraps generate_svg() with settings suitable
+        for report thumbnails.
+
+        Parameters
+        ----------
+        left_col : str
+            I-channel column name.
+        right_col : str
+            Q-channel column name.
+        max_sample : int, optional
+            Maximum number of samples to display.
+
+        Returns
+        -------
+        str
+            SVG image as text.
+        """        
         return self.generate_svg(
             left_col=left_col,
             right_col=right_col,
@@ -224,6 +278,35 @@ class MainWindow(QWidget):
         layout="stacked-breath",   # "stacked" #(legacy) or "twinx"
         title=None
         ):
+        """
+        Generate an SVG plot for report embedding.
+
+        Supports multiple layouts including dual-axis I/Q plots,
+        minute-by-minute breathing views with respiratory-rate
+        overlays, and a legacy stacked layout.
+
+        Parameters
+        ----------
+        left_col : str
+            Primary signal column.
+        right_col : str
+            Secondary signal column.
+        signal_type : str
+            Plot type ('I_Q' or 'breath_pulse').
+        max_sample : int, optional
+            Maximum number of samples displayed.
+        figsize : tuple
+            Figure size in inches.
+        layout : str
+            Plot layout mode.
+        title : str, optional
+            Custom figure title.
+
+        Returns
+        -------
+        str
+            SVG image content suitable for HTML embedding.
+        """
         
         if max_sample is None or max_sample > len(self.df):
             max_sample = (
@@ -424,6 +507,13 @@ class MainWindow(QWidget):
         return svg_text[svg_text.find("<svg"):]
         
     def resolve_column(self, *candidates):
+        """
+        Find the first available column from a list of alternatives.
+        Returns
+        -------
+        str | None
+            Matching column name or None if not found.
+        """
 
         for col in candidates:
             if col in self.df.columns:
@@ -432,6 +522,18 @@ class MainWindow(QWidget):
         return None
 
     def generate_report(self):
+        """
+        Generate an HTML acquisition summary report.
+
+        The report includes acquisition metadata, duration,
+        respiratory statistics, SVG thumbnails and overview plots.
+        Values are inserted into an HTML template using placeholder
+        replacement.
+
+        Output
+        ------
+        <file_id>_report.html
+        """
 
         # Assign values for plotting
         I_col = self.resolve_column("I", "I_raw")
