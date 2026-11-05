@@ -473,11 +473,7 @@ class MainWindow(QWidget):
             "{{RMS}}": "N/A",
             "{{MISSING}}": "N/A",
             "{{CLIPPING}}": "N/A",
-            "{{EVENTS}}": "N/A",
-
-            "{{CONCLUSION}}": "Report generation pipeline operational.",
-
-            "{{COMPANY}}": "INTERA"
+            "{{EVENTS}}": "N/A"
         }
 
         for key, value in replacements.items():
