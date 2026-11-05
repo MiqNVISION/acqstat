@@ -170,7 +170,7 @@ class MainWindow(QWidget):
     def set_time_vect(self):
         self.time = np.linspace(0, len(self.df)/self.srate, len(self.df))
         
-    def compute_respiratory_rate(self, d_breath, srate, win_sec = 30.0):
+    def compute_respiratory_rate_mean(self, d_breath, srate, win_sec = 30.0):
         win_samples = int(win_sec*srate)
         step_samples = int(srate*1.0)
         win_i = 0
@@ -583,7 +583,7 @@ class MainWindow(QWidget):
             breath_col = self.resolve_column("d_breath", "Distance_breath")
             if breath_col != None:
                 breath_val = self.df[breath_col]
-                resp_rate, resp_t = self.compute_respiratory_rate(breath_val, srate, win_sec=30.)
+                resp_rate, resp_t = self.compute_respiratory_rate_mean(breath_val, srate, win_sec=30.)
                 print ("RR -----------------")
                 print (resp_rate)
                 print (resp_t)
