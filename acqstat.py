@@ -310,11 +310,11 @@ class MainWindow(QWidget):
                         )
 
                         rr_t = self.resp_t[mask] - m*60
-                        rr_v = self.resp_rate[mask]
+                        rr_val = self.resp_rate[mask]
 
                         axRR.plot(
                             rr_t,
-                            rr_v,
+                            rr_val,
                             color='red',
                             marker='+',
                             linestyle='-'
@@ -323,7 +323,7 @@ class MainWindow(QWidget):
                         axRR.set_ylim([6, 30])
 
                         axRR.set_ylabel(
-                            'RRate',
+                            'RespRate',
                              color='red',
                              alpha=0.7
                             )
@@ -342,7 +342,7 @@ class MainWindow(QWidget):
                     ax.set_xlim(0, 60)
 
                     ax.set_ylabel(
-                        f"{left_label} {m}-{m+1}m",
+                        f"{left_label} {m}-{m+1}min",
                         color=self.channel_color(left_col),
                         rotation=0,
                         ha="left"
