@@ -177,6 +177,7 @@ class MainWindow(QWidget):
         colval = []
         br_list = []
         br_times = []
+        br_idx_list = []
         for start in range(0,len(d_breath)-win_samples+1, step_samples):
             # print(win_i)
             win_i += 1
@@ -196,6 +197,9 @@ class MainWindow(QWidget):
                 colval.append('red')
             br_list.append(br_mean)    
             br_times.append((stop-1)/srate)
+            br_idx_list = np.union1d(br_idx_list, np.array(br_idx)+start).tolist()
+        self.resp_peak_t = np.array(br_idx_list)/srate
+        print(f"resp peak times(s):\n {self.resp_peak_t}")
         return np.array(br_list), np.array(br_times)
         
     
@@ -473,7 +477,7 @@ class MainWindow(QWidget):
             "{{RMS}}": "N/A",
             "{{MISSING}}": "N/A",
             "{{CLIPPING}}": "N/A",
-            "{{EVENTS}}": "N/A"
+            "{{EVENTS}}": str(f"{self.resp_peak_number} breathing peaks ({self.resp_rate_mean:4.2f} bpm average)")
         }
 
         for key, value in replacements.items():
@@ -579,6 +583,9 @@ class MainWindow(QWidget):
             resp_rate = None
             self.resp_rate = None
             self.resp_t = None
+            self.resp_peak_t = None
+            self.resp_peak_number = -1
+            self.resp_rate_mean = None
             
             breath_col = self.resolve_column("d_breath", "Distance_breath")
             if breath_col != None:
@@ -589,7 +596,8 @@ class MainWindow(QWidget):
                 print (resp_t)
                 self.resp_rate = resp_rate
                 self.resp_t = resp_t 
- 
+                self.resp_peak_number = len(self.resp_peak_t)
+                self.resp_rate_mean = (self.resp_peak_number - 1)/ duration * 60.0 #bpm
             # Compute time
             self.set_time_vect()
             
