@@ -327,7 +327,19 @@ class MainWindow(QWidget):
                              color='red',
                              alpha=0.7
                             )
-
+                            
+                        # Add textbox current bpm
+                        maskRR = (
+                        (self.resp_peak_t >= m*60) &
+                        (self.resp_peak_t < (m+1)*60)
+                        )
+                        axRR.text(
+                        0.98, 0.85, f'{len(self.resp_peak_t[maskRR])-1} bpm',
+                        transform=axRR.transAxes,
+                        ha='right', va='bottom',
+                        bbox=dict(boxstyle='square,pad=0.2',facecolor='wheat', alpha=0.5, edgecolor='black')
+                        )
+                        
                         axRR.grid(
                             color='red',
                             alpha=0.5,
@@ -340,6 +352,8 @@ class MainWindow(QWidget):
                     ax.grid(alpha=0.3)
 
                     ax.set_xlim(0, 60)
+
+
 
                     ax.set_ylabel(
                         f"{left_label} {m}-{m+1}min",
